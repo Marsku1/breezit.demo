@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-100 mb-3">
+          <mat-label>Vardas</mat-label>
+          <input matInput formControlName="name" />
+          @if(dynamicForm.get('name')?.errors?.required) {
+          <mat-error>Vardas yra privalomas.</mat-error>
+          } @if(dynamicForm.get('name')?.errors?.minlength) {
+          <mat-error>Vardas privalo būti bent 2 simbolių ilgio.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>Pavardė</mat-label>
+          <input matInput formControlName="surname" />
+          @if(dynamicForm.get('surname')?.errors?.required) {
+          <mat-error>Pavardė yra privaloma.</mat-error>
+          } @if(dynamicForm.get('surname')?.errors?.minlength) {
+          <mat-error>Pavardė privalo būti bent 2 simbolių ilgio.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>El.paštas</mat-label>
+          <input matInput formControlName="email" />
+          @if(dynamicForm.get('email')?.errors?.required) {
+          <mat-error>El.paštas yra privalomas.</mat-error>
+          } @if(dynamicForm.get('email')?.errors?.email) {
+          <mat-error>Netinkamo formato el.paštas.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="mb-3">
+          <mat-label>Ar ieškai darbo?</mat-label>
+          <mat-radio-group formControlName="isSearchWork">
+            <mat-radio-button [value]="true">Taip</mat-radio-button>
+            <mat-radio-button [value]="false">Ne</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>Kokio lygio specialistas esi?</mat-label>
+          <mat-select formControlName="seniorityLevel">
+            @for(level of seniority; track level.value) {
+            <mat-option [value]="level.value">{{ level.viewValue }}</mat-option>
+            }
+          </mat-select>
+          @if(dynamicForm.get('seniorityLevel')?.errors?.required) {
+          <mat-error>Privaloma pasirinkti</mat-error>
+          }
+        </mat-form-field>
+
+        @if(getSeniorityFormValue() == seniorityEnum.Junior) {
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>2+2</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="juniorValidation"
+            placeholder="2+2"
+          />
+          @if(dynamicForm.get('juniorValidation')?.errors?.notFour) {
+          <mat-error>Klaidingas atsakymas</mat-error>
+          }
+        </mat-form-field>
+        } @if(getSeniorityFormValue() == seniorityEnum.Mid) {
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>Aprašymas</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="midValidation"
+            placeholder="Aprašymas"
+          />
+          @if(dynamicForm.get('midValidation')?.errors?.containsAError) {
+          <mat-error>Aprašyme turi nebūti raidės a</mat-error>
+          }
+        </mat-form-field>
+        } @if(getSeniorityFormValue() == seniorityEnum.Senior) {
+        <button
+          mat-raised-button
+          type="submit"
+          [disabled]="dynamicForm.invalid"
+        >
+          Kitas langas
+        </button>
+        }
+      </form>
+    </div>
+  </div>
+</div>

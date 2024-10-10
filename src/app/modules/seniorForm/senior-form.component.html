@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      @if(formData) {
+        @if(formData.get('isSearchWork')?.value) {
+          <h1 class="text-center">Aplikacija pateikta</h1>
+          } @else {
+          <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="fill" class="w-100 mb-3">
+              <mat-label>Motyvacinis laiškas</mat-label>
+              <textarea
+                matInput
+                type="text"
+                formControlName="seniorValidation"
+                rows="5"
+              ></textarea>
+              @if(formData.get('seniorValidation')?.errors?.minlength) {
+              <mat-error>Mažiausiai 140 simbolių</mat-error>
+              }
+            </mat-form-field>
+
+            <button mat-raised-button type="submit" [disabled]="formData.invalid">
+              Pateikti aplikaciją
+            </button>
+          </form>
+          } @if(submittedData) {
+          <div class="text-break mt-5">
+            {{ submittedData }}
+          </div>
+          }
+      }
+
+    </div>
+  </div>
+</div>
